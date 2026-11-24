@@ -1455,6 +1455,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   .cpy.ok { color: #9fe0c7; border-color: rgba(159,224,199,.6); }
   @media (hover: none) { .cpy { opacity: 1; } }
   .em-point a, .ck-tbl a { color: #1a5c5b; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(26,92,91,.35); } .em-point a:hover, .ck-tbl a:hover { border-bottom-color: #1a5c5b; }
+  #mhead { display: none; }
+  @media (max-width: 860px) {
+    body.home #mhead { display: flex; align-items: center; gap: 12px; padding: 9px 12px; background: #0e3b3a; box-shadow: 0 1px 0 rgba(255,255,255,.08); flex: none; }
+    body.home #mbtn { display: none; }
+    #mbtn2 { flex: none; width: 40px; height: 40px; border-radius: 10px; border: 1px solid #2a6463; background: transparent; color: #e9f6f4; font-size: 20px; cursor: pointer; display: grid; place-items: center; }
+    .mlogo { flex: none; width: 36px; height: 36px; border-radius: 9px; }
+    .mbt b { display: block; color: #fff; font-size: 16px; line-height: 1.15; } .mbt small { display: block; color: #9fe0c7; font-size: 12px; margin-top: 1px; }
+    body.home .hero > .hero-l { top: 40px; }
+  }
   .jhead { display: flex; align-items: baseline; justify-content: space-between; margin: 40px 2px 16px; }
   .jhead h3 { font-size: 22px; letter-spacing: -.01em; }
   .jhead span { font-size: 13px; color: var(--soft); }

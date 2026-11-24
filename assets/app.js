@@ -312,6 +312,7 @@ if (PAGE) {
 }
 if (store.get("ws-side") === "closed" && !isMobile()) toggleSide(true);
 $("mbtn").addEventListener("click", () => document.body.classList.add("menu"));
+$("mbtn2").addEventListener("click", () => document.body.classList.add("menu"));
 $("scrim").addEventListener("click", () => document.body.classList.remove("menu"));
 if (store.get("ws-big") === "1") toggleBig(true);
 buildNav();
