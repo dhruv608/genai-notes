@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Temperature &amp; Max Tokens | Generative AI Notes</title>
+<meta name="description" content="How random the answer is, and how long it can be">
+<link rel="canonical" href="https://genai-notes.vercel.app/temperature-max-tokens/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="Temperature &amp; Max Tokens | Generative AI Notes">
+<meta property="og:description" content="How random the answer is, and how long it can be">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/temperature-max-tokens/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/temperature-max-tokens.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Temperature &amp; Max Tokens | Generative AI Notes">
+<meta name="twitter:description" content="How random the answer is, and how long it can be">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/temperature-max-tokens.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n04_3", "root": "../", "lesson": {"id": "n04_3", "title": "Temperature & Max Tokens", "short": "Temperature & Max Tokens", "unit": "Unit 1", "unitName": "Start Here: GenAI Basics", "pos": 7, "of": 7, "sub": "", "info": "How random the answer is, and how long it can be", "html": "<h2 class=\"c3\" id=\"8-temperature-max-tokens\">1. Temperature &amp; Max Tokens<\/h2>\n<blockquote class=\"def\"><span class=\"deflab\">Definition<\/span>\n<p><strong>Temperature<\/strong> is a setting that controls how random the model's choice of the next token is. Low temperature gives safe, predictable answers. High temperature gives more creative, surprising ones.<\/p>\n<\/blockquote>\n<figure class=\"visual\"><div class=\"tm3 tmx\">\n  <div class=\"tm-q\">Prompt: <b>\"Give me a name for a coffee shop.\"<\/b> Asked three times:<\/div>\n  <div class=\"tm\">\n    <h5>Temperature 0<\/h5><p>Always the top token<\/p>\n    <div class=\"run\">Coffee House<\/div><div class=\"run\">Coffee House<\/div><div class=\"run\">Coffee House<\/div>\n    <em>Almost always the same<\/em>\n  <\/div>\n  <div class=\"tm\">\n    <h5>Temperature 1<\/h5><p>The model's normal choice<\/p>\n    <div class=\"run\">Brew Corner<\/div><div class=\"run\">Coffee House<\/div><div class=\"run\">The Daily Grind<\/div>\n    <em>Some variety<\/em>\n  <\/div>\n  <div class=\"tm\">\n    <h5>Temperature above 1<\/h5><p>Lower tokens get a chance<\/p>\n    <div class=\"run\">Moonbean Alchemy<\/div><div class=\"run\">The Purring Espresso<\/div><div class=\"run\">Caffeine Comet<\/div>\n    <em>Very creative, can go off track<\/em>\n  <\/div>\n  <div class=\"tm-n\">Example outputs are illustrative. Real answers vary.<\/div>\n<\/div>\n<\/figure>\n<p><strong>How to use it:<\/strong> keep it low (0 to 0.3) for facts, code and data extraction. Raise it (0.7 to 1) for stories, ideas and marketing copy.<\/p>\n<p><strong>Range:<\/strong> OpenAI 0–2 · Claude 0–1 · Gemini 0–2 · Mistral 0–1.5<\/p>\n<p><strong>Max Tokens (<code>max_tokens<\/code>)<\/strong> sets a strict upper limit on how many tokens the model can generate in one reply. It controls API cost and keeps responses concise.<\/p>\n<div class=\"hl\"><pre><span><\/span><code><span class=\"c1\"># Setting temperature and max_tokens inline<\/span>\n<span class=\"n\">model<\/span> <span class=\"o\">=<\/span> <span class=\"n\">init_chat_model<\/span><span class=\"p\">(<\/span><span class=\"s2\">\"google_genai:gemini-2.5-flash\"<\/span><span class=\"p\">,<\/span> <span class=\"n\">temperature<\/span><span class=\"o\">=<\/span><span class=\"mf\">0.2<\/span><span class=\"p\">,<\/span> <span class=\"n\">max_tokens<\/span><span class=\"o\">=<\/span><span class=\"mi\">150<\/span><span class=\"p\">)<\/span>\n<\/code><\/pre><\/div>\n\n", "toc": [{"id": "8-temperature-max-tokens", "name": "8. Temperature & Max Tokens"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>

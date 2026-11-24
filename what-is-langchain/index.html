@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What is LangChain? | Generative AI Notes</title>
+<meta name="description" content="What LangChain is, and the toolbox of building blocks it gives you">
+<link rel="canonical" href="https://genai-notes.vercel.app/what-is-langchain/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="What is LangChain? | Generative AI Notes">
+<meta property="og:description" content="What LangChain is, and the toolbox of building blocks it gives you">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/what-is-langchain/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/what-is-langchain.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What is LangChain? | Generative AI Notes">
+<meta name="twitter:description" content="What LangChain is, and the toolbox of building blocks it gives you">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/what-is-langchain.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n06_1", "root": "../", "lesson": {"id": "n06_1", "title": "What is LangChain?", "short": "What is LangChain?", "unit": "Unit 2", "unitName": "Build with LangChain", "pos": 2, "of": 14, "sub": "LangChain basics", "info": "What LangChain is, and the toolbox of building blocks it gives you", "html": "<h2 class=\"c1\" id=\"1-what-is-langchain\">1. What Is LangChain?<\/h2>\n<blockquote class=\"def\"><span class=\"deflab\">Definition<\/span>\n<p><strong>LangChain<\/strong> is an <mark class=\"hp\">open-source framework<\/mark> for building applications powered by large language models. It gives you <mark class=\"hk\">ready-made building blocks<\/mark> to connect an LLM with <mark class=\"hp\">prompts, memory, your data and tools<\/mark>.<\/p>\n<\/blockquote>\n<p>Created by <strong>Harrison Chase<\/strong> in 2022. Available in <strong>Python<\/strong> and <strong>JavaScript<\/strong>.<\/p>\n<hr />\n<h2 class=\"c2\" id=\"2-what-langchain-gives-you\">2. What LangChain Gives You<\/h2>\n<p>You could write all of this code yourself. But LangChain already gives you <mark class=\"hp\">ready-made, well-managed code<\/mark> that its developers write and maintain. It is <mark class=\"hk\">open source<\/mark>, easy to use, and the best way to build AI applications. That is why we prefer it.<\/p>\n<figure class=\"visual\"><div class=\"tbx\">\n  <div class=\"tbx-label\">The LangChain toolbox<\/div>\n  <div class=\"tbx-grid\">\n    <div class=\"blk g1\" data-n=\"1\" style=\"grid-area:1/1\"><b>Models<\/b><span class=\"bd\">Call any LLM with the same code<\/span><i>Different code for every company?<\/i><\/div>\n    <div class=\"blk g1\" data-n=\"2\" style=\"grid-area:1/2\"><b>Prompts<\/b><span class=\"bd\">Reusable prompts with blanks<\/span><i>Same prompt typed again and again?<\/i><\/div>\n    <div class=\"blk g1\" data-n=\"3\" style=\"grid-area:1/3\"><b>Output Parsers<\/b><span class=\"bd\">Clean, structured data instead of paragraphs<\/span><i>Answers come as messy text?<\/i><\/div>\n    <div class=\"blk g2\" data-n=\"4\" style=\"grid-area:2/1\"><b>Memory<\/b><span class=\"bd\">Keep the conversation history<\/span><i>It forgets the chat?<\/i><\/div>\n    <div class=\"tbx-llm\" style=\"grid-area:2/2\"><small>your app<\/small><b>LLM<\/b><span>+ building blocks<\/span><\/div>\n    <div class=\"blk g3\" data-n=\"7\" style=\"grid-area:2/3\"><b>Chains<\/b><span class=\"bd\">Connect steps one after another<\/span><i>Many steps to join?<\/i><\/div>\n    <div class=\"blk g2\" data-n=\"5\" style=\"grid-area:3/1\"><b>Document Loaders<\/b><span class=\"bd\">Read PDFs, websites and files<\/span><i>It cannot read your PDFs?<\/i><\/div>\n    <div class=\"blk g2\" data-n=\"6\" style=\"grid-area:3/2\"><b>Vector Stores<\/b><span class=\"bd\">Search your data by meaning<\/span><i>Too much data to search?<\/i><\/div>\n    <div class=\"blk g3\" data-n=\"8\" style=\"grid-area:3/3\"><b>Tools<\/b><span class=\"bd\">Let the LLM call functions and take actions<\/span><i>It cannot take actions?<\/i><\/div>\n    <div class=\"blk rbn\" data-n=\"9\" style=\"grid-area:4/1/5/4\">\n      <div class=\"rb-l\"><b>Runnables<\/b><span class=\"bd\">The common standard every block follows. Because of it, any block can connect to any other block.<\/span><\/div>\n      <div class=\"rb-r\"><span class=\"rb-k\">connect with<\/span><code>|<\/code><span class=\"rb-k\">and every block can<\/span><code>.invoke()<\/code><code>.stream()<\/code><code>.batch()<\/code><\/div>\n    <\/div>\n  <\/div>\n<\/div>\n<\/figure>\n", "toc": [{"id": "1-what-is-langchain", "name": "1. What Is LangChain?"}, {"id": "2-what-langchain-gives-you", "name": "2. What LangChain Gives You"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>

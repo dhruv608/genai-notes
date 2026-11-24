@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is an Embedding Vector? | Generative AI Notes</title>
+<meta name="description" content="What an embedding vector is, a movie example, why we need it, and which models make it">
+<link rel="canonical" href="https://genai-notes.vercel.app/what-is-an-embedding-vector/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="What Is an Embedding Vector? | Generative AI Notes">
+<meta property="og:description" content="What an embedding vector is, a movie example, why we need it, and which models make it">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/what-is-an-embedding-vector/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/what-is-an-embedding-vector.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Is an Embedding Vector? | Generative AI Notes">
+<meta name="twitter:description" content="What an embedding vector is, a movie example, why we need it, and which models make it">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/what-is-an-embedding-vector.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n19_1", "root": "../", "lesson": {"id": "n19_1", "title": "What Is an Embedding Vector?", "short": "What Is an Embedding Vector?", "unit": "Unit 3", "unitName": "Chat with Your Data (RAG)", "pos": 2, "of": 11, "sub": "Embeddings", "info": "What an embedding vector is, a movie example, why we need it, and which models make it", "html": "<h2 class=\"c1\" id=\"1-what-is-an-embedding-vector\">1. What Is an Embedding Vector?<\/h2>\n<p>An <strong>embedding<\/strong> is a list of numbers that stands for the <strong>meaning<\/strong> of a piece of text. It is also called a <strong>vector<\/strong>.<\/p>\n<p>It is made by an <strong>embedding model<\/strong>. This is a ready-made program: you give it a chunk of text, and it gives you back one list of numbers. The same text always gives the same list, and texts with a similar meaning give similar lists.<\/p>\n<p>We make these lists for all our chunks, store them, and later use them to find the chunks that match a question.<\/p>\n<figure class=\"visual\"><div class=\"emp\">\n  <div class=\"emp-c\"><div class=\"stp-l\">A chunk of text<\/div><div class=\"emp-q\">\"A young farmer discovers a hidden map and sets out to find a lost city.\"<\/div><\/div>\n  <div class=\"emp-a\">&rarr;<span>embedding model<\/span><\/div>\n  <div class=\"emp-v\"><div class=\"stp-l\">Its embedding vector<\/div><div class=\"emp-vec\"><b>[<\/b><u>0.02<\/u><u>-0.34<\/u><u>0.12<\/u><u>0.50<\/u><u>-0.07<\/u><u>0.81<\/u><u class=\"dots\">&hellip;<\/u><b>]<\/b><\/div><div class=\"emp-n\">1,024 numbers<\/div><\/div>\n<\/div>\n<div class=\"em-cap\">Example numbers.<\/div>\n<ul class=\"emp-pts\">\n  <li><b>Same size every time.<\/b> A short line and a long chunk both give a list of the same length, for example 1,024. The length depends on the model.<\/li>\n  <li><b>Each number holds a little meaning.<\/b> More numbers means more room for detail.<\/li>\n  <li><b>Similar meaning gives a similar list.<\/b> Texts about different things give lists that are far apart.<\/li>\n  <li><b>Reality check.<\/b> The meaning is spread across all the numbers together. You cannot point at one number and say \"this is adventure\".<\/li>\n<\/ul>\n<\/figure>\n<hr />\n<h2 class=\"c2\" id=\"2-example-movies-as-vectors\">2. Example: Movies as Vectors<\/h2>\n<p>Let us see what \"every number holds some meaning\" looks like. Take three movie plots and give each a vector.<\/p>\n<figure class=\"visual\"><div class=\"em-tbl\"><table>\n<tr><th>Movie plot<\/th><th>action<\/th><th>romance<\/th><th>comedy<\/th><th>sci-fi<\/th><\/tr>\n<tr><td>A superhero team fights an alien army<\/td><td>0.90<\/td><td>0.10<\/td><td>0.30<\/td><td>0.80<\/td><\/tr>\n<tr><td>Astronauts fly through a wormhole to save humanity<\/td><td>0.50<\/td><td>0.20<\/td><td>0.00<\/td><td>0.95<\/td><\/tr>\n<tr><td>Two strangers fall in love in Paris<\/td><td>0.00<\/td><td>0.95<\/td><td>0.30<\/td><td>0.00<\/td><\/tr>\n<\/table><\/div>\n<ul class=\"emp-pts\">\n  <li><b>Each number says a little about the plot.<\/b> The first movie scores high on action and sci-fi. The third scores high on romance. That is why an embedding is also called a <b>meaning vector<\/b>.<\/li>\n  <li><b>Similar plots get similar vectors.<\/b> The superhero movie and the wormhole movie are both sci-fi action, so their lists are close (closeness 0.90). The Paris love story is far from them (closeness 0.15).<\/li>\n  <li><b>More numbers means more detail.<\/b> With 4 numbers we can only say \"action, romance, comedy, sci-fi\". With 1,024 numbers a model can also capture mood, setting, themes and more.<\/li>\n  <li><b>Reality check.<\/b> I named the 4 columns only so you can see the idea. In a real embedding the numbers have no names, and the meaning is spread across all of them together.<\/li>\n<\/ul>\n<\/figure>\n<hr />\n<h2 class=\"c3\" id=\"3-why-do-we-need-it\">3. Why Do We Need It?<\/h2>\n<p>In RAG we have many chunks, and for every question we must find the chunk that <strong>answers<\/strong> it. The first idea is to match words. But people say the same thing in different words, so matching words picks the wrong chunk. An embedding lets the computer compare <strong>meaning<\/strong> instead.<\/p>\n<figure class=\"visual\"><div class=\"why2-q\"><div class=\"stp-l\">The question<\/div><div class=\"why2-qt\">\"How much money did we earn?\"<\/div><\/div>\n<div class=\"em-tbl why2\"><table>\n<tr><th>Chunk in the PDF<\/th><th>Words in common<br>with the question<\/th><th>Close in meaning?<\/th><\/tr>\n<tr><td>\"The total income was 4.2 lakh.\"<\/td><td><span class=\"why2-no\">none<\/span><\/td><td><span class=\"why2-yes\">yes, it answers the question<\/span><\/td><\/tr>\n<tr><td>\"The money transfer was done on Monday.\"<\/td><td><span class=\"why2-yes\">&ldquo;money&rdquo;<\/span><\/td><td><span class=\"why2-no\">no, a different topic<\/span><\/td><\/tr>\n<tr><td>\"Paris is the capital of France.\"<\/td><td><span class=\"why2-no\">none<\/span><\/td><td><span class=\"why2-no\">no<\/span><\/td><\/tr>\n<\/table><\/div>\n<ul class=\"emp-pts\">\n  <li><b>Matching words picks the wrong chunk.<\/b> The best answer shares no word with the question. The wrong chunk shares the word \"money\".<\/li>\n  <li><b>Matching meaning picks the right chunk.<\/b> \"earn\" and \"income\" are about the same thing, even though the letters are different.<\/li>\n  <li><b>An embedding makes this possible.<\/b> Every chunk and the question become lists of numbers, and the lists with a similar meaning are close to each other. The computer can measure that.<\/li>\n<\/ul>\n<\/figure>\n<hr />\n<h2 class=\"c4\" id=\"4-who-makes-it\">4. Who Makes It?<\/h2>\n<p>You do not make embeddings yourself. Companies and open-source projects build <strong>embedding models<\/strong>, and you use one of them.<\/p>\n<figure class=\"visual\"><div class=\"em-tbl who3\"><table>\n<tr><th>Embedding model<\/th><th>Made by<\/th><th>How you use it<\/th><th>Size of its vector<br>(fixed for the model)<\/th><\/tr>\n<tr><td><code>all-MiniLM-L6-v2<\/code><\/td><td>open source<\/td><td>on your computer<\/td><td><b>384<\/b><\/td><\/tr>\n<tr><td><code>mistral-embed<\/code><\/td><td>Mistral AI<\/td><td>API<\/td><td><b>1,024<\/b><\/td><\/tr>\n<tr><td><code>text-embedding-3-small<\/code><\/td><td>OpenAI<\/td><td>API<\/td><td><b>1,536<\/b><\/td><\/tr>\n<tr><td><code>text-embedding-3-large<\/code><\/td><td>OpenAI<\/td><td>API<\/td><td><b>3,072<\/b><\/td><\/tr>\n<\/table><\/div>\n<div class=\"who2\">\n  <div class=\"who2-c\"><div class=\"stp-l\">Through an API<\/div><div class=\"who2-t\">OpenAI, Mistral, Google<\/div><div class=\"who2-p\">You send the text over the internet and get the vector back. You need an API key, and you pay per use.<\/div><\/div>\n  <div class=\"who2-c\"><div class=\"stp-l\">On your own computer<\/div><div class=\"who2-t\">Open-source models<\/div><div class=\"who2-p\">You download the model and run it yourself. It is free to use, and your text stays on your machine.<\/div><\/div>\n<\/div>\n<ul class=\"emp-pts\">\n  <li><b>Every model has its own embedding table, with its own fixed size.<\/b> That size is the number of columns in the table, and the usual length of the vectors the model gives. You cannot change the table.<\/li>\n  <li><b>You choose a model<\/b> and use its default size. Some models let you ask for a shorter vector at the end. That saves space and search time but keeps less detail.<\/li>\n  <li><b>Use the same embedding model for the chunks and for the question.<\/b> Numbers from two different models do not match. This is only for retrieving. After we get the chunk text back, the LLM that writes the answer can be a different model, because it reads text, not vectors.<\/li>\n<\/ul>\n<\/figure>\n", "toc": [{"id": "1-what-is-an-embedding-vector", "name": "1. What Is an Embedding Vector?"}, {"id": "2-example-movies-as-vectors", "name": "2. Example: Movies as Vectors"}, {"id": "3-why-do-we-need-it", "name": "3. Why Do We Need It?"}, {"id": "4-who-makes-it", "name": "4. Who Makes It?"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>

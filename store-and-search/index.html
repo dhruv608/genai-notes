@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store and Search | Generative AI Notes</title>
+<meta name="description" content="What a vector database stores, the two jobs (store and search), how one question is searched, and top-k">
+<link rel="canonical" href="https://genai-notes.vercel.app/store-and-search/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="Store and Search | Generative AI Notes">
+<meta property="og:description" content="What a vector database stores, the two jobs (store and search), how one question is searched, and top-k">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/store-and-search/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/store-and-search.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Store and Search | Generative AI Notes">
+<meta name="twitter:description" content="What a vector database stores, the two jobs (store and search), how one question is searched, and top-k">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/store-and-search.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n20_1", "root": "../", "lesson": {"id": "n20_1", "title": "Store and Search", "short": "Store and Search", "unit": "Unit 3", "unitName": "Chat with Your Data (RAG)", "pos": 4, "of": 11, "sub": "Search & retrieval", "info": "What a vector database stores, the two jobs (store and search), how one question is searched, and top-k", "html": "<h2 class=\"c1\" id=\"what-the-vector-database-stores\">What the Vector Database Stores<\/h2>\n<p>A normal database stores text and numbers. A vector database also stores the <strong>vector<\/strong>, so we can search by meaning. But the vector alone is not enough, so each chunk is kept as one row with four parts.<\/p>\n<figure class=\"visual\"><div class=\"px\">\n  <div class=\"px-r\"><span>ID<\/span><div><code>chunk_001<\/code> A name for the row, so we can point to it.<\/div><\/div>\n  <div class=\"px-r\"><span>Vector<\/span><div><code>[-0.0069, -0.053, 0.04 &hellip;]<\/code> The numbers from the embedding model. <b>We search with this.<\/b><\/div><\/div>\n  <div class=\"px-r\"><span>Chunk text<\/span><div>&ldquo;RAG combines a retriever with a generator &hellip;&rdquo; The words. We never search with them, but <b>this is what we give to the LLM.<\/b><\/div><\/div>\n  <div class=\"px-r hi\"><span>Metadata<\/span><div><code>source: rag_paper.pdf, page: 3<\/code> Where the chunk came from. Used to filter, and to show sources.<\/div><\/div>\n<\/div><div class=\"em-tbl\"><table>\n<tr><th>ID<\/th><th>Vector<\/th><th>Chunk text<\/th><th>Metadata<\/th><\/tr>\n<tr><td><code>chunk_001<\/code><\/td><td><code>[-0.0069, -0.053, 0.04 &hellip;]<\/code><\/td><td>RAG combines a retriever with a generator &hellip;<\/td><td><code>source: rag_paper.pdf, page: 3<\/code><\/td><\/tr>\n<tr><td><code>chunk_002<\/code><\/td><td><code>[-0.0026, -0.053, 0.04 &hellip;]<\/code><\/td><td>The main advantage is access to fresh knowledge &hellip;<\/td><td><code>source: rag_paper.pdf, page: 4<\/code><\/td><\/tr>\n<tr><td><code>chunk_003<\/code><\/td><td><code>[-0.0089, -0.043, 0.04 &hellip;]<\/code><\/td><td>Retrieval reduces hallucination because &hellip;<\/td><td><code>source: rag_paper.pdf, page: 4<\/code><\/td><\/tr>\n<\/table><\/div>\n<div class=\"em-cap\">The database holds many rows like these. Example rows.<\/div>\n<\/figure>\n<hr />\n<h2 class=\"c2\" id=\"two-jobs-store-once-search-every-time\">Two Jobs: Store Once, Search Every Time<\/h2>\n<p>Using a vector database is two separate jobs. <strong>Storing<\/strong> happens once, when we load the documents. <strong>Searching<\/strong> happens every time a user asks a question.<\/p>\n<figure class=\"visual\"><div class=\"em-lane\"><div class=\"stp-l\">Job 1: Store (once, when we load the documents)<\/div>\n<div class=\"em-flow\">\n  <div class=\"em-fc\"><div class=\"stp-l\">Chunk text<\/div>RAG combines a retriever with a generator &hellip;<\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc\"><div class=\"stp-l\">Embedding model<\/div>turns the text into a vector<\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc\"><div class=\"stp-l\">Vector<\/div><code>[-0.0069, -0.053, 0.04 &hellip;]<\/code><\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc db\"><div class=\"stp-l\">Saved as one row<\/div>ID + vector + text + metadata<\/div>\n<\/div><\/div>\n<div class=\"em-lane\"><div class=\"stp-l\">Job 2: Search (every time a question arrives)<\/div>\n<div class=\"em-flow\">\n  <div class=\"em-fc q\"><div class=\"stp-l\">The question<\/div>what is main advantage of Retrieval-Augmented Generation?<\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc\"><div class=\"stp-l\">Embedding model<\/div><span>the <b>same<\/b> one as before<\/span><\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc\"><div class=\"stp-l\">Query vector<\/div><code>[-0.0039, -0.077, 0.066 &hellip;]<\/code><\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc db\"><div class=\"stp-l\">Compare<\/div>with the stored vectors<\/div><div class=\"em-ar\">&rarr;<\/div>\n  <div class=\"em-fc out\"><div class=\"stp-l\">Result<\/div>the top-k chunk texts<\/div>\n<\/div><\/div>\n<div class=\"em-point\"><b>Both jobs use the same embedding model.<\/b> Only then do the question and the chunks live in the same vector space, where we can compare them.<\/div>\n<\/figure>\n<hr />\n<h2 class=\"c3\" id=\"searching-step-by-step\">Searching, Step by Step<\/h2>\n<p>Let us follow one question from the start to the end.<\/p>\n<figure class=\"visual\"><div class=\"px\">\n  <div class=\"px-r\"><span>1. Embed<\/span><div>The question goes to the same embedding model. Out comes the <b>query vector<\/b>.<\/div><\/div>\n  <div class=\"px-r\"><span>2. Score<\/span><div>Give every stored vector a <b>similarity score<\/b> against the query vector. How the score is worked out is the next tab.<\/div><\/div>\n  <div class=\"px-r\"><span>3. Rank<\/span><div>Sort the scores. The best one comes first.<\/div><\/div>\n  <div class=\"px-r hi\"><span>4. Return<\/span><div>Take the top <b>k<\/b> and give back their <b>chunk text<\/b> and metadata. The text goes into the prompt as context.<\/div><\/div>\n<\/div><div class=\"em-point\"><b>Searching is a comparison of vectors.<\/b> The words of the question never meet the words of the chunks. Step 2 is the slow part when there are many vectors, and the third tab fixes it.<\/div>\n<\/figure>\n<hr />\n<h2 class=\"c4\" id=\"top-k-how-many-do-you-want\">Top-k: How Many Do You Want?<\/h2>\n<p>The search returns the <strong>k<\/strong> best chunks. In your code, <code>k=3<\/code> means three.<\/p>\n<figure class=\"visual\"><div class=\"hl\" data-x=\"1\"><pre><span class=\"n\">retrieved_docs<\/span><span class=\"o\">=<\/span> <span class=\"n\">vector_store<\/span><span class=\"o\">.<\/span><span class=\"n\">similarity_search<\/span><span class=\"p\">(<\/span><span class=\"n\">query<\/span><span class=\"o\">=<\/span><span class=\"n\">user_question<\/span><span class=\"p\">,<\/span><span class=\"n\">k<\/span><span class=\"o\">=<\/span><span class=\"mi\">3<\/span><span class=\"p\">)<\/span><\/pre><\/div>\n<div class=\"em-tbl rank\"><table>\n<tr><th>Rank<\/th><th>Chunk<\/th><th>Similarity score<\/th><th><\/th><\/tr>\n<tr class=\"top\"><td>1<\/td><td>The main advantage is access to fresh knowledge &hellip;<\/td><td>0.89<\/td><td><span class=\"tag d\">returned<\/span><\/td><\/tr>\n<tr class=\"top\"><td>2<\/td><td>Retrieval reduces hallucination because &hellip;<\/td><td>0.84<\/td><td><span class=\"tag d\">returned<\/span><\/td><\/tr>\n<tr class=\"top\"><td>3<\/td><td>RAG combines a retriever with a generator &hellip;<\/td><td>0.80<\/td><td><span class=\"tag d\">returned<\/span><\/td><\/tr>\n<tr><td>4<\/td><td>The encoder maps text to vectors &hellip;<\/td><td>0.52<\/td><td><\/td><\/tr>\n<tr><td>5<\/td><td>Training used a large public corpus &hellip;<\/td><td>0.31<\/td><td><\/td><\/tr>\n<\/table><\/div>\n<div class=\"em-cap\">Example scores. With k=3 the top three go to the prompt as context.<\/div>\n<\/figure>\n", "toc": [{"id": "what-the-vector-database-stores", "name": "What the Vector Database Stores"}, {"id": "two-jobs-store-once-search-every-time", "name": "Two Jobs: Store Once, Search Every Time"}, {"id": "searching-step-by-step", "name": "Searching, Step by Step"}, {"id": "top-k-how-many-do-you-want", "name": "Top-k: How Many Do You Want?"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>

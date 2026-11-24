@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt to Response | Generative AI Notes</title>
+<meta name="description" content="Prompt to response, apps vs code, and how the API works">
+<link rel="canonical" href="https://genai-notes.vercel.app/prompt-to-response/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="Prompt to Response | Generative AI Notes">
+<meta property="og:description" content="Prompt to response, apps vs code, and how the API works">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/prompt-to-response/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/prompt-to-response.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prompt to Response | Generative AI Notes">
+<meta name="twitter:description" content="Prompt to response, apps vs code, and how the API works">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/prompt-to-response.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n03_2", "root": "../", "lesson": {"id": "n03_2", "title": "Prompt to Response", "short": "Prompt to Response", "unit": "Unit 1", "unitName": "Start Here: GenAI Basics", "pos": 4, "of": 7, "sub": "", "info": "Prompt to response, apps vs code, and how the API works", "html": "<h2 class=\"c5\" id=\"5-prompt-llm-response\">1. Prompt → LLM → Response<\/h2>\n<p>Every call has the same three parts.<\/p>\n<figure class=\"visual\"><div class=\"flow3 simple\">\n  <div class=\"f3 f3-p\"><small>1 · Prompt<\/small><div class=\"f3-t\">What is the capital of India?<\/div><\/div>\n  <div class=\"f3-a\"><span>sends<\/span>→<\/div>\n  <div class=\"f3 f3-m\"><small>2 · LLM<\/small><span class=\"f3-logo\"><svg viewBox=\"0 0 24 24\" aria-label=\"ChatGPT\"><path d=\"M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z\"/><\/svg><\/span><b>Large Language Model<\/b><em>like ChatGPT<\/em><\/div>\n  <div class=\"f3-a\"><span>returns<\/span>→<\/div>\n  <div class=\"f3 f3-r\"><small>3 · Response<\/small><div class=\"f3-t\">The capital of India is New Delhi.<\/div><\/div>\n<\/div>\n<\/figure>\n<hr />\n<h2 class=\"c1\" id=\"6-two-ways-to-use-an-llm\">2. Two Ways to Use an LLM<\/h2>\n<figure class=\"visual\"><div class=\"two\">\n  <div class=\"tw a\">\n    <span class=\"tw-n\">01<\/span>\n    <h5>Use a ready-made app<\/h5>\n    <div class=\"win mini\">\n      <div class=\"win-top\"><i><\/i><i><\/i><i><\/i><span>chatgpt.com<\/span><\/div>\n      <div class=\"win-body\">\n        <div class=\"cuser\">Explain tokens in one line<\/div>\n        <div class=\"crow\"><span class=\"cav\"><svg viewBox=\"0 0 24 24\" aria-label=\"ChatGPT\"><path d=\"M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z\"/><\/svg><\/span><div class=\"cans\"><p>Tokens are the small pieces of text an AI reads.<\/p><\/div><\/div>\n        <div class=\"cbar\"><span class=\"cplus\">+<\/span><span class=\"ctext\">Ask anything<\/span><b>↑<\/b><\/div>\n      <\/div>\n    <\/div>\n    <div class=\"tw-sites\"><span>chatgpt.com<\/span><span>claude.ai<\/span><span>gemini.google.com<\/span><\/div>\n    <div class=\"tw-for\">Already built for you. For <b>using<\/b> AI, no code needed<\/div>\n  <\/div>\n  <div class=\"tw b\">\n    <span class=\"tw-n\">02<\/span>\n    <h5>Use it in your code<\/h5>\n    <div class=\"tw-code\"><span>your_program.py<\/span><code>model.invoke(\"Hello\")<\/code><\/div>\n    <ul><li>Your Python program calls the model<\/li><li>Needs a package<\/li><li>Needs an API key<\/li><\/ul>\n    <div class=\"tw-for\">For <b>building<\/b> AI products<\/div>\n  <\/div>\n<\/div>\n<\/figure>\n<blockquote>\n<p><strong>Why an API key?<\/strong> It is your secret password to the model. The company uses it to know who is calling and to bill you for the tokens you use.<\/p>\n<\/blockquote>\n<hr />\n<h2 class=\"c2\" id=\"7-how-software-connects-to-an-llm-the-api\">3. How Software Connects to an LLM: The API<\/h2>\n<p>To use a hosted model (Google, OpenAI, Mistral) in our Python scripts, web apps, or mobile apps, we use an <strong>API (Application Programming Interface)<\/strong>:<\/p>\n<figure class=\"visual\"><div class=\"api\">\n  <div class=\"api-box api-me\"><small>Your side<\/small><b>Your Python code<\/b><span>asks the question<\/span><\/div>\n  <div class=\"api-mid\">\n    <div class=\"api-line go\"><b>Request<\/b><span>prompt + API key, sent over HTTP<\/span><i><\/i><\/div>\n    <div class=\"api-line back\"><b>Response<\/b><span>the generated text<\/span><i><\/i><\/div>\n  <\/div>\n  <div class=\"api-box api-cloud\"><small>Provider cloud<\/small><b>Runs the model on GPUs<\/b>\n    <div class=\"api-chips\"><span class=\"c1\">Google<\/span><span class=\"c2\">OpenAI<\/span><span class=\"c3\">Mistral<\/span><\/div><\/div>\n<\/div>\n<\/figure>", "toc": [{"id": "5-prompt-llm-response", "name": "5. Prompt → LLM → Response"}, {"id": "6-two-ways-to-use-an-llm", "name": "6. Two Ways to Use an LLM"}, {"id": "7-how-software-connects-to-an-llm-the-api", "name": "7. How Software Connects to an LLM: The API"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is State? | Generative AI Notes</title>
+<meta name="description" content="Why steps share data, what the state is, and why a node returns only what it changes">
+<link rel="canonical" href="https://genai-notes.vercel.app/what-is-state/">
+<meta name="theme-color" content="#0e3b3a">
+<meta property="og:site_name" content="Generative AI Notes">
+<meta property="og:title" content="What Is State? | Generative AI Notes">
+<meta property="og:description" content="Why steps share data, what the state is, and why a node returns only what it changes">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genai-notes.vercel.app/what-is-state/">
+<meta property="og:image" content="https://genai-notes.vercel.app/og/what-is-state.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Is State? | Generative AI Notes">
+<meta name="twitter:description" content="Why steps share data, what the state is, and why a node returns only what it changes">
+<meta name="twitter:image" content="https://genai-notes.vercel.app/og/what-is-state.jpg">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<link rel="stylesheet" href="../assets/app.css?v=63d72f4d">
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <svg class="blogo" aria-hidden="true" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="15" fill="#1a5c5b"/><path d="M32 21C26 17.5 19 17.5 14 19.5V46C19 44 26 44 32 47.5Z" fill="#fff"/><path d="M32 21C38 17.5 45 17.5 50 19.5V46C45 44 38 44 32 47.5Z" fill="#fff" fill-opacity=".82"/><circle cx="32" cy="14" r="3.6" fill="#f2b04e"/></svg><div class="bt"><h1>Generative AI</h1><p>LangChain · RAG · LangGraph</p></div>
+    <button class="rb" data-side title="Collapse sidebar (S)">«</button>
+  </div>
+  <div class="rail">
+    <button class="rb" data-side title="Open sidebar (S)">☰</button>
+    <button class="rb" data-go="home" title="Home">⌂</button>
+  </div>
+  <div class="search"><input id="q" placeholder="Search all notes…" autocomplete="off"></div>
+  <div class="hits" id="hits" hidden></div>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <header class="top" id="head">
+    <div class="hmid"><div class="crumb" id="crumb"></div><h2 class="htitle" id="title"></h2></div>
+    <div class="seg" id="tabs"></div>
+    <button class="sq" id="share" title="Share this lesson" aria-label="Share this lesson"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg></button>
+    <button class="sq" id="big" title="Bigger text (A)">Aa</button>
+    <button class="sq" id="focus" title="Full screen reading (F) · Esc to exit">⛶</button>
+  </header>
+  <div class="view" id="view"></div>
+</main>
+<button id="mbtn" aria-label="Open menu">☰</button>
+<div id="scrim"></div>
+
+<script id="ktx" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" async></script>
+<script id="mmd" src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" async></script>
+<script src="../assets/nav.js?v=217dc0ba"></script>
+<script>window.PAGE = {"id": "n25_1", "root": "../", "lesson": {"id": "n25_1", "title": "What Is State?", "short": "What Is State?", "unit": "Unit 4", "unitName": "Agents with LangGraph", "pos": 4, "of": 16, "sub": "", "info": "Why steps share data, what the state is, and why a node returns only what it changes", "html": "<h2 class=\"c1\" id=\"the-problem-steps-need-to-share-data\">The Problem: Steps Need to Share Data<\/h2>\n<p>Our graph has many steps. A step in the middle often needs something that an earlier step made.<\/p>\n<figure class=\"visual\"><div class=\"px\">\n  <div class=\"px-r\"><span>The issue<\/span><div>We turn a raw text into a Hinglish video script in three steps: clean it up, write the script, translate it.<\/div><\/div>\n  <div class=\"px-r\"><span>The first try<\/span><div>Pass the result from one function to the next by hand.<\/div><\/div>\n  <div class=\"px-r\"><span>Why it fails<\/span><div>With three steps it works. With branches, loops and parallel steps, you pass many things around and lose track. A step in the middle may need data from two steps ago.<\/div><\/div>\n  <div class=\"px-r hi\"><span>The fix<\/span><div>Keep everything in <b>one shared place<\/b>: the state. Every step reads from it and writes to it.<\/div><\/div>\n<\/div><\/figure>\n<hr />\n<h2 class=\"c2\" id=\"what-is-state\">What Is State?<\/h2>\n<blockquote class=\"def\"><span class=\"deflab\">Definition<\/span>\n<p>The <strong>state<\/strong> is the shared data of the graph. It is a dictionary with fixed keys. Every step can read all of it, and every step can write to it.<\/p>\n<\/blockquote>\n<p>Your sequential graph has four keys. Watch them fill up, step by step.<\/p>\n<figure class=\"visual\"><div class=\"hl\" data-x=\"1\"><pre><span class=\"k\">class<\/span><span class=\"w\"> <\/span><span class=\"nc\">pipelinestate<\/span><span class=\"p\">(<\/span><span class=\"n\">TypedDict<\/span><span class=\"p\">):<\/span>\n    <span class=\"n\">raw_input<\/span> <span class=\"p\">:<\/span> <span class=\"nb\">str<\/span>\n    <span class=\"n\">edited_text<\/span> <span class=\"p\">:<\/span> <span class=\"nb\">str<\/span>\n    <span class=\"n\">script_text<\/span> <span class=\"p\">:<\/span><span class=\"nb\">str<\/span>\n    <span class=\"n\">final_output<\/span><span class=\"p\">:<\/span><span class=\"nb\">str<\/span><\/pre><\/div>\n<div class=\"em-tbl\"><table>\n<tr><th>When<\/th><th>raw_input<\/th><th>edited_text<\/th><th>script_text<\/th><th>final_output<\/th><\/tr>\n<tr><td><b>Start<\/b><\/td><td><b>your text<\/b><\/td><td>&ndash;<\/td><td>&ndash;<\/td><td>&ndash;<\/td><\/tr>\n<tr><td><b>After the editor<\/b><\/td><td>your text<\/td><td><b>clean text<\/b><\/td><td>&ndash;<\/td><td>&ndash;<\/td><\/tr>\n<tr><td><b>After the scriptwriter<\/b><\/td><td>your text<\/td><td>clean text<\/td><td><b>video script<\/b><\/td><td>&ndash;<\/td><\/tr>\n<tr><td><b>After the translator<\/b><\/td><td>your text<\/td><td>clean text<\/td><td>video script<\/td><td><b>Hinglish text<\/b><\/td><\/tr>\n<\/table><\/div>\n<div class=\"em-cap\">The bold cell is the one that step just wrote. Nothing is ever passed by hand.<\/div>\n<div class=\"em-point\"><b>You start the graph with only one key.<\/b> In your code: <code>app.invoke({\"raw_input\": \"...\"})<\/code>. The other keys stay empty until a node fills them.<\/div>\n<\/figure>\n<hr />\n<h2 class=\"c3\" id=\"a-node-returns-only-what-it-changes\">A Node Returns Only What It Changes<\/h2>\n<p>A node is a normal Python function. It receives the <strong>whole<\/strong> state, but it returns only the keys it wants to change.<\/p>\n<figure class=\"visual\"><div class=\"hl\" data-x=\"1\"><pre><span class=\"k\">def<\/span><span class=\"w\"> <\/span><span class=\"nf\">editor_node<\/span><span class=\"p\">(<\/span><span class=\"n\">state<\/span><span class=\"p\">:<\/span><span class=\"n\">pipelinestate<\/span><span class=\"p\">):<\/span>\n    <span class=\"c1\"># ... build the prompt and call the model ...<\/span>\n    <span class=\"k\">return<\/span> <span class=\"p\">{<\/span><span class=\"s2\">\"edited_text\"<\/span><span class=\"p\">:<\/span><span class=\"n\">response<\/span><span class=\"o\">.<\/span><span class=\"n\">content<\/span><span class=\"o\">.<\/span><span class=\"n\">strip<\/span><span class=\"p\">()}<\/span><\/pre><\/div>\n<div class=\"px\">\n  <div class=\"px-r\"><span>It receives<\/span><div>the whole state, so it can read <code>raw_input<\/code> or any other key.<\/div><\/div>\n  <div class=\"px-r\"><span>It returns<\/span><div>a small dictionary with only the key it changed: <code>edited_text<\/code>.<\/div><\/div>\n  <div class=\"px-r hi\"><span>LangGraph does the rest<\/span><div>It puts the new value into the state. All the other keys stay as they were.<\/div><\/div>\n<\/div><div class=\"em-cap\">The first and last lines are from your <code>02_sequential.py<\/code>. The comment stands for the prompt and the model call.<\/div>\n<\/figure>\n", "toc": [{"id": "the-problem-steps-need-to-share-data", "name": "The Problem: Steps Need to Share Data"}, {"id": "what-is-state", "name": "What Is State?"}, {"id": "a-node-returns-only-what-it-changes", "name": "A Node Returns Only What It Changes"}], "search": "", "slides": null, "slideCount": 0, "code": []}};</script>
+<script src="../assets/app.js?v=cb74ef98"></script>
+</body>
+</html>
